@@ -44,11 +44,13 @@ SBUS::SBUS(HardwareSerial& bus)
 }
 
 /* SBUS object, input the serial bus, store inversion preference */
-SBUS::SBUS(HardwareSerial& bus)
-{
-	_bus = &bus;
-	_enable_inverter = enable_inverter;
-}
+#if defined(SELECTABLE_INVERSION)
+	SBUS::SBUS(HardwareSerial& bus)
+	{
+		_bus = &bus;
+		_enable_inverter = enable_inverter;
+	}
+#endif
 
 /* starts the serial communication */
 void SBUS::begin()

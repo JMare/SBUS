@@ -87,7 +87,7 @@ class SBUS{
 		uint8_t _readLen[_numChannels],_writeLen[_numChannels];
 		bool _useReadCoeff[_numChannels], _useWriteCoeff[_numChannels];
 		HardwareSerial* _bus;
-		bool enable_inverter = true;
+		bool _enable_inverter = true;
 		bool parse();
 		void scaleBias(uint8_t channel);
 		float PolyVal(size_t PolySize, float *Coefficients, float X);
