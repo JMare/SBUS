@@ -45,7 +45,7 @@ SBUS::SBUS(HardwareSerial& bus)
 
 /* SBUS object, input the serial bus, store inversion preference */
 #if defined(SELECTABLE_INVERSION)
-	SBUS::SBUS(HardwareSerial& bus)
+	SBUS::SBUS(HardwareSerial& bus, bool enable_inverter)
 	{
 		_bus = &bus;
 		_enable_inverter = enable_inverter;
