@@ -43,6 +43,13 @@ SBUS::SBUS(HardwareSerial& bus)
 	_bus = &bus;
 }
 
+/* SBUS object, input the serial bus, store inversion preference */
+SBUS::SBUS(HardwareSerial& bus)
+{
+	_bus = &bus;
+	_enable_inverter = enable_inverter;
+}
+
 /* starts the serial communication */
 void SBUS::begin()
 {
@@ -54,10 +61,16 @@ void SBUS::begin()
 	}
 	// begin the serial port for SBUS
 	#if defined(__MK20DX128__) || defined(__MK20DX256__)  // Teensy 3.0 || Teensy 3.1/3.2
-		_bus->begin(_sbusBaud,SERIAL_8E1_RXINV_TXINV);
+		if(_enable_inverter)
+			_bus->begin(_sbusBaud,SERIAL_8E1_RXINV_TXINV);
+		else
+			_bus->begin(_sbusBaud,SERIAL_8E1);
 		SERIALPORT = _bus;
 	#elif defined(__IMXRT1052__) || defined(__MK64FX512__) || defined(__MK66FX1M0__) || defined(__MKL26Z64__)  // Teensy 4.0 || Teensy 3.5 || Teensy 3.6 || Teensy LC
-		_bus->begin(_sbusBaud,SERIAL_8E2_RXINV_TXINV);
+		if(_enable_inverter)
+			_bus->begin(_sbusBaud,SERIAL_8E2_RXINV_TXINV);
+		else
+			_bus->begin(_sbusBaud,SERIAL_8E2);
 	#elif defined(STM32L496xx) || defined(STM32L476xx) || defined(STM32L433xx) || defined(STM32L432xx)  // STM32L4
 		_bus->begin(_sbusBaud,SERIAL_SBUS);
 	#elif defined(_BOARD_MAPLE_MINI_H_) // Maple Mini

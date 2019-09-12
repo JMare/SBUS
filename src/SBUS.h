@@ -38,9 +38,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 	|| defined(__AVR_ATmega2560__) || defined(ESP32)
 #endif
 
+#if defined(__MK20DX128__) || defined(__MK20DX256__) \
+	|| defined(__IMXRT1052__) || defined(__MK64FX512__)  \
+	|| defined(__MK66FX1M0__) || defined(__MKL26Z64__)
+	#define SELECTABLE_INVERSION
+#endif
+
 class SBUS{
 	public:
 		SBUS(HardwareSerial& bus);
+
+		#if defined(SELECTABLE_INVERSION)
+			SBUS(HardwareSerial& bus, bool enable_inverter);
+		#endif
+
 		void begin();
 		bool read(uint16_t* channels, bool* failsafe, bool* lostFrame);
 		bool readCal(float* calChannels, bool* failsafe, bool* lostFrame);
@@ -76,6 +87,7 @@ class SBUS{
 		uint8_t _readLen[_numChannels],_writeLen[_numChannels];
 		bool _useReadCoeff[_numChannels], _useWriteCoeff[_numChannels];
 		HardwareSerial* _bus;
+		bool enable_inverter = true;
 		bool parse();
 		void scaleBias(uint8_t channel);
 		float PolyVal(size_t PolySize, float *Coefficients, float X);
